@@ -18,9 +18,9 @@ export function ErrorBoundaryFallback({
 }: ErrorBoundaryFallbackProps): React.ReactNode {
   const presentation = getErrorPresentation(error);
   const isOverlay = variant === 'overlay';
-  const containerClass = isOverlay
-    ? 'fixed inset-0 z-50 flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-slate-50/90 via-cyan-50/70 to-slate-100/90 p-4 backdrop-blur-sm dark:from-slate-950/80 dark:via-slate-900/70 dark:to-slate-950/90 sm:p-6 lg:p-10'
-    : 'mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center bg-gradient-to-br from-slate-50/90 via-cyan-50/70 to-slate-100/90 p-4 backdrop-blur-sm dark:from-slate-950/80 dark:via-slate-900/70 dark:to-slate-950/90 sm:p-6 lg:p-10';
+  const baseClass =
+    'flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-slate-50/90 via-cyan-50/70 to-slate-100/90 p-4 backdrop-blur-sm dark:from-slate-950/80 dark:via-slate-900/70 dark:to-slate-950/90 sm:p-6 lg:p-10';
+  const containerClass = isOverlay ? `fixed inset-0 z-50 ${baseClass}` : `mx-auto max-w-6xl ${baseClass}`;
 
   return (
     <div className={containerClass} role="alertdialog">
