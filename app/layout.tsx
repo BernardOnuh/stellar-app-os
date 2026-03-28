@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import { Header } from '@/components/organisms/Header/Header';
 import { Footer } from '@/components/organisms/Footer/Footer';
 import { ToastProvider } from '@/components/providers/ToastProvider';
+import { WalletProviderWrapper } from '@/components/providers/WalletProviderWrapper';
 import './globals.css';
 
 const inter = Inter({
@@ -57,13 +59,29 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <ToastProvider>
-          <Header />
-          <main id="main-content" tabIndex={-1}>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
+            (function() {
+              try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = stored === 'light' || stored === 'dark' ? stored : (prefersDark ? 'dark' : 'light');
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+                document.documentElement.classList.add('no-transitions');
+                window.addEventListener('load', function() {
+                  document.documentElement.classList.remove('no-transitions');
+                });
+              } catch(e) {}
+            })();
+          `}
+        </Script>
+        <WalletProviderWrapper>
+          <ToastProvider>
+            <Header />
             {children}
-          </main>
-          <Footer />
-        </ToastProvider>
+            <Footer />
+          </ToastProvider>
+        </WalletProviderWrapper>
       </body>
     </html>
   );
